@@ -7,7 +7,7 @@ This module currently requires MMM-SimpleKeyboard and my fork of MMRIZE's fantas
 ## Installation
 
 To install the module, use your terminal to:
-
+ 
 1. Navigate to your MagicMirror's modules folder. If you are using the default installation directory, use the command:<br />`cd ~/MagicMirror/modules`
 2. Clone the module:<br />`git clone https://github.com/tjat84/MMM-GoogleCalendarEventAdder.git`
 3. Install dependencies:<br /> run `npm install` from the MMM-GoogleCalendarEventAdder directory.
