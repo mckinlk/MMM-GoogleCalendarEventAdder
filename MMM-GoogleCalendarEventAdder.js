@@ -373,31 +373,29 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         return wrapper;
     },
 
-        openForm: function (isNewEvent = true) {
-            
+    openForm: function (isNewEvent = true) {
+        
 
-            let form = document.getElementById("eventForm");
-            let startTimeInput = document.getElementById("startTime");
-            console.log("startTimeInput element:", startTimeInput);
+        let form = document.getElementById("eventForm");
+        let startTimeInput = document.getElementById("startTime");
+        console.log("startTimeInput element:", startTimeInput);
 
-            if (form) {
-                form.style.display = "block";
-                // Check if it's a new event
-                if (isNewEvent && !startTimeInput.value) {
-                    let now = new Date();
-                    let year = now.getFullYear();
-                    let month = ("0" + (now.getMonth() + 1)).slice(-2);
-                    let day = ("0" + now.getDate()).slice(-2);
-                    let hours = ("0" + now.getHours()).slice(-2);
-                    let minutes = ("0" + now.getMinutes()).slice(-2);
-                    startTimeInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
-                    console.log("Inside openForm. startTime.value:", startTime.value);
-                }
-               // this.isNewEvent = false;  // Reset the flag
+        if (form) {
+            form.style.display = "block";
+            // Check if it's a new event
+            if (isNewEvent && !startTimeInput.value) {
+                let now = new Date();
+                let year = now.getFullYear();
+                let month = ("0" + (now.getMonth() + 1)).slice(-2);
+                let day = ("0" + now.getDate()).slice(-2);
+                let hours = ("0" + now.getHours()).slice(-2);
+                let minutes = ("0" + now.getMinutes()).slice(-2);
+                startTimeInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+                console.log("Inside openForm. startTime.value:", startTime.value);
             }
-        },
-
-    
+            // this.isNewEvent = false;  // Reset the flag
+        }
+    },
 
     closeForm: function () {
         let form = document.getElementById("eventForm");
@@ -421,10 +419,10 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         let endTime = document.getElementById("endTime").value;
         let allDay = document.getElementById("allDay").checked;
     
-     // Capitalize the first letter of the event title
+        // Capitalize the first letter of the event title
         eventTitle = this.capitalizeFirstLetter(eventTitle);
     
-    // Check if a name button is selected
+        // Check if a name button is selected
         const selectedButton = document.querySelector('.nameButton.selected');
         if (selectedButton) {
             const selectedName = selectedButton.textContent;
@@ -469,121 +467,118 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         this.updateDom();
     },
     
-        // Function to delete an event
-        deleteEvent: function(eventId) {
-            let payload = {
-                calendarId: this.config.calendarId,
-                eventId: this.currentEventId
-            };
+    // Function to delete an event
+    deleteEvent: function(eventId) {
+        let payload = {
+            calendarId: this.config.calendarId,
+            eventId: this.currentEventId
+        };
         console.log ("socket notification sent to delete event");
         this.sendSocketNotification("DELETE_CALENDAR_EVENT", payload);
         this.closeForm();
-       // this.sendNotification("REFRESH_CALENDAR");
+        // this.sendNotification("REFRESH_CALENDAR");
         this.message = "Deleting event...";
         this.messageType = "info";
         this.updateDom();
     },
-
     
-        notificationReceived: function(notification, payload, sender) {
-            // Event listener for the event being clicked on the calendar
-            switch (notification) {
-                case "EDIT_CALENDAR_EVENT":
-                    // Populate the form with event details
-                    this.openForm(false);
-                    this.populateFormWithEventDetails(payload);
-                    return; 
-            }
-            
-            // If the notification is BUTTON_CLICKED and the sender is the MMM-CalendarExt3 module
-            if (notification === 'BUTTON_CLICKED' && sender.name === 'MMM-CalendarExt3') {
-                // Open the form and prepopulate it for a new event
-                this.openForm(true);
-                this.populateFormForNewEvent(payload);
-            }
-        },
+    notificationReceived: function(notification, payload, sender) {
+        // Event listener for the event being clicked on the calendar
+        switch (notification) {
+            case "EDIT_CALENDAR_EVENT":
+                // Populate the form with event details
+                this.openForm(false);
+                this.populateFormWithEventDetails(payload);
+                return; 
+        }
+        
+        // If the notification is BUTTON_CLICKED and the sender is the MMM-CalendarExt3 module
+        if (notification === 'BUTTON_CLICKED' && sender.name === 'MMM-CalendarExt3') {
+            // Open the form and prepopulate it for a new event
+            this.openForm(true);
+            this.populateFormForNewEvent(payload);
+        }
+    },
 
-        populateFormForNewEvent: function(payload) {
-            console.log("Inside populateFormForNewEvent.");
+    populateFormForNewEvent: function(payload) {
+        console.log("Inside populateFormForNewEvent.", payload);
 
-            // Prepopulate the start date with the date from the payload
-            let startTime = document.getElementById('startTime');
-            if (startTime) {
-                let date = new Date(payload.date); // Assuming you're passing a specific date in the payload
-                let year = date.getFullYear();
-                let month = ("0" + (date.getMonth() + 1)).slice(-2);
-                let day = ("0" + date.getDate()).slice(-2);
-                let hours = "08";
-                let minutes = "00";
-                startTime.value = `${year}-${month}-${day}T${hours}:${minutes}`;
-            }
+        // Prepopulate the start date with the date from the payload
+        let startTime = document.getElementById('startTime');
+        if (startTime) {
+            let date = new Date(payload.date); // Assuming you're passing a specific date in the payload
+            let year = date.getFullYear();
+            let month = ("0" + (date.getMonth() + 1)).slice(-2);
+            let day = ("0" + date.getDate()).slice(-2);
+            let hours = "08";
+            let minutes = "00";
+            startTime.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
 
-            let endTime = document.getElementById('endTime');
-                if (endTime) {
-                let date = new Date(payload.date); // Assuming you're passing a specific date in the payload
-                let year = date.getFullYear();
-                let month = ("0" + (date.getMonth() + 1)).slice(-2);
-                let day = ("0" + date.getDate()).slice(-2);
-                let hours = "08";
-                let minutes = "30";
-                endTime.value = `${year}-${month}-${day}T${hours}:${minutes}`;
-            }
-                this.attachKeyboardToInput();
-        },
-
-        populateFormWithEventDetails: function(eventDetails) {
-            console.log("Inside populateFormWithEventDetails.");
-            let eid = document.getElementById("id");
-            console.log(eid);
-            // Populate the event title
-            document.getElementById("eventTitle").value = eventDetails.title;
-
-            // Set the all-day event checkbox
-            let allDayCheckbox = document.getElementById("allDay");
-            allDayCheckbox.checked = eventDetails.allDay === "true";
-
-            // Handle start time using similar logic to populateFormForNewEvent
-            let startTime = document.getElementById('startTime');
-            if (startTime && eventDetails.startDate) {
-                let date = new Date(Number(eventDetails.startDate));  // Convert string to number
-                let year = date.getFullYear();
-                let month = ("0" + (date.getMonth() + 1)).slice(-2);
-                let day = ("0" + date.getDate()).slice(-2);
-                let hours = ("0" + date.getHours()).slice(-2);
-                let minutes = ("0" + date.getMinutes()).slice(-2);
-                startTime.value = `${year}-${month}-${day}T${hours}:${minutes}`;
-                console.log("After setting value in populateFormWithEventDetails:", startTime.value);
-            }
-
-            // Handle end time
-            if (eventDetails.endDate) {
-                let endDate = new Date(Number(eventDetails.endDate));  // Convert string to number
-                let formattedEndDate = endDate.toISOString().slice(0,16); // Format: "YYYY-MM-DDTHH:MM"
-                document.getElementById("endTime").value = formattedEndDate;
-            }
-
-            // Store the event ID in a hidden field or as a module variable
-            this.currentEventId = eventDetails.id;
-            console.log("currentEventId: ", eventDetails.id);
+        let endTime = document.getElementById('endTime');
+            if (endTime) {
+            let date = new Date(payload.date); // Assuming you're passing a specific date in the payload
+            let year = date.getFullYear();
+            let month = ("0" + (date.getMonth() + 1)).slice(-2);
+            let day = ("0" + date.getDate()).slice(-2);
+            let hours = "08";
+            let minutes = "30";
+            endTime.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
             this.attachKeyboardToInput();
-        },
+    },
 
-        attachKeyboardToInput: function() {
-            let self = this; // Store the reference of 'this' for use inside the event listener
-            let eventTitleInput = document.getElementById("eventTitle");
-            if (eventTitleInput) {
-                eventTitleInput.addEventListener("focus", function(event) {
-                    console.log("Event Title input field focused.");
-                    // Notify the keyboard module to show the keyboard
-                    console.log("Attempting to send SHOW_KEYBOARD notification");
-                    self.sendNotification("SHOW_KEYBOARD");
-                });
-            } else {
-                console.log("Event Title input field not found.");
-            }
-        },
+    populateFormWithEventDetails: function(eventDetails) {
+        console.log("Inside populateFormWithEventDetails.", eventDetails);
+        let eid = document.getElementById("id");
+        console.log(eid);
+        // Populate the event title
+        document.getElementById("eventTitle").value = eventDetails.title;
 
+        // Set the all-day event checkbox
+        let allDayCheckbox = document.getElementById("allDay");
+        allDayCheckbox.checked = eventDetails.allDay === "true";
 
+        // Handle start time using similar logic to populateFormForNewEvent
+        let startTime = document.getElementById('startTime');
+        if (startTime && eventDetails.startDate) {
+            let date = new Date(Number(eventDetails.startDate));  // Convert string to number
+            let year = date.getFullYear();
+            let month = ("0" + (date.getMonth() + 1)).slice(-2);
+            let day = ("0" + date.getDate()).slice(-2);
+            let hours = ("0" + date.getHours()).slice(-2);
+            let minutes = ("0" + date.getMinutes()).slice(-2);
+            startTime.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+            console.log("After setting value in populateFormWithEventDetails:", startTime.value);
+        }
+
+        // Handle end time
+        if (eventDetails.endDate) {
+            let endDate = new Date(Number(eventDetails.endDate));  // Convert string to number
+            let formattedEndDate = endDate.toISOString().slice(0,16); // Format: "YYYY-MM-DDTHH:MM"
+            document.getElementById("endTime").value = formattedEndDate;
+        }
+
+        // Store the event ID in a hidden field or as a module variable
+        this.currentEventId = eventDetails.id;
+        console.log("currentEventId: ", eventDetails.id);
+        this.attachKeyboardToInput();
+    },
+
+    attachKeyboardToInput: function() {
+        let self = this; // Store the reference of 'this' for use inside the event listener
+        let eventTitleInput = document.getElementById("eventTitle");
+        if (eventTitleInput) {
+            eventTitleInput.addEventListener("focus", function(event) {
+                console.log("Event Title input field focused.");
+                // Notify the keyboard module to show the keyboard
+                console.log("Attempting to send SHOW_KEYBOARD notification");
+                self.sendNotification("SHOW_KEYBOARD");
+            });
+        } else {
+            console.log("Event Title input field not found.");
+        }
+    },
 
     socketNotificationReceived: function(notification, payload) {
         switch (notification) {
@@ -612,7 +607,6 @@ Module.register("MMM-GoogleCalendarEventAdder", {
                 break;
         }
     },
-
 
     showMessage: function (message, type) {
         this.message = message;
