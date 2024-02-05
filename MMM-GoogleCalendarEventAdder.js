@@ -607,7 +607,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
                 this.showMessage('Failed to delete event', 'error');
                 break;
         }
-        self.sendNotification(updateNotification);
+        self.sendNotification(this.config.updateNotification);
     },
 
     showMessage: function (message, type) {
