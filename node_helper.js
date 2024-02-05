@@ -122,7 +122,7 @@ module.exports = NodeHelper.create({
     calendar.events.insert(
       {
         auth: oauth2Client,
-        calendarId: "primary",
+        calendarId: payload.calendarId,
         resource: event,
       },
       (err, event) => {
