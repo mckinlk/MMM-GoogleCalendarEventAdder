@@ -87,7 +87,7 @@ module.exports = NodeHelper.create({
     }
   },
 
-  insertCalendarEvent: function(calendarId, payload, oauth2Client) {
+  insertCalendarEvent: function(payload, oauth2Client) {
     const startTime = moment(payload.startTime).tz("America/New_York").format();
     const endTime = moment(payload.endTime).tz("America/New_York").format();
 
