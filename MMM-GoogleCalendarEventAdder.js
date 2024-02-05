@@ -477,7 +477,8 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         console.log ("socket notification sent to delete event");
         this.sendSocketNotification("DELETE_CALENDAR_EVENT", payload);
         this.closeForm();
-        // this.sendNotification("REFRESH_CALENDAR");
+        // this.sendNotification(this.config.updateNotification);
+        this.config.updateNotification
         this.message = "Deleting event...";
         this.messageType = "info";
         this.updateDom();
@@ -607,7 +608,8 @@ Module.register("MMM-GoogleCalendarEventAdder", {
                 this.showMessage('Failed to delete event', 'error');
                 break;
         }
-        self.sendNotification(this.config.updateNotification);
+        Log.info("Sending update notification");
+        this.sendNotification(this.config.updateNotification, {});
     },
 
     showMessage: function (message, type) {
