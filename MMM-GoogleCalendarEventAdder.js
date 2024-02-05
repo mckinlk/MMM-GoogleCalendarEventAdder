@@ -12,6 +12,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
 
     start: function () {
         Log.info("Starting module: " + this.name);
+        Log.info("Starting module: " + this.config.calendarId);
     },
 
     getStyles: function () {
