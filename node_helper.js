@@ -21,8 +21,10 @@ module.exports = NodeHelper.create({
   },
 
   socketNotificationReceived: function(notification, payload) {
+    console.log('Calendar ID in Payload: ', payload.calendarId);    
       switch(notification) {
 	  case "ADD_CALENDAR_EVENT":
+      
 	      this.addCalendarEvent(payload);
 	      break;
 	  case "UPDATE_CALENDAR_EVENT":
@@ -85,7 +87,7 @@ module.exports = NodeHelper.create({
     }
   },
 
-  insertCalendarEvent: function(payload, oauth2Client) {
+  insertCalendarEvent: function(calendarId, payload, oauth2Client) {
     const startTime = moment(payload.startTime).tz("America/New_York").format();
     const endTime = moment(payload.endTime).tz("America/New_York").format();
 
@@ -117,7 +119,7 @@ module.exports = NodeHelper.create({
     }
 
     console.log("Constructed event: ", event); // Log constructed event
-
+    console.log("calendarId: ", payload.calendarId); // Log constructed event
     const calendar = google.calendar({ version: "v3", auth: oauth2Client });
     calendar.events.insert(
       {

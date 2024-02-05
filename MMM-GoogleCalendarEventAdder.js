@@ -447,7 +447,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         }
     
         let payload = {
-            calendarId: this.calendarId,
+            calendarId: this.config.calendarId,
             eventTitle: eventTitle,
             startTime: startTime,
             endTime: endTime,
@@ -473,7 +473,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         // Function to delete an event
         deleteEvent: function(eventId) {
             let payload = {
-                calendarId: this.calendarId,
+                calendarId: this.config.calendarId,
                 eventId: this.currentEventId
             };
         console.log ("socket notification sent to delete event");
@@ -588,6 +588,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
 
 
     socketNotificationReceived: function(notification, payload) {
+        console.log('Calendar ID in Payload: ', payload.calendarId);    
         switch (notification) {
             case "EVENT_ADD_SUCCESS_MAIN":
                 this.showMessage('Event added!', 'success');
