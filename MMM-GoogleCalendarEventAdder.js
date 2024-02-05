@@ -2,7 +2,8 @@ Module.register("MMM-GoogleCalendarEventAdder", {
     // Default module configuration
     defaults: {
         text: "Add event",
-        calendarId: "primary"
+        calendarId: "primary",
+        updateNotificaiton: 'GCAL_UPDATE'
     },
     
     endContainer: null,
@@ -606,6 +607,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
                 this.showMessage('Failed to delete event', 'error');
                 break;
         }
+        self.sendNotification("SHOW_KEYBOARD");
     },
 
     showMessage: function (message, type) {
