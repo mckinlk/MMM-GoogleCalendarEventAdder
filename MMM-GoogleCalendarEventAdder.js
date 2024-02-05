@@ -12,6 +12,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
 
     start: function () {
         Log.info("Starting module: " + this.name);
+        Log.info("Starting module: " + this.config.calendarId);
     },
 
     getStyles: function () {
@@ -447,7 +448,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         }
     
         let payload = {
-            calendarId: this.calendarId,
+            calendarId: this.config.calendarId,
             eventTitle: eventTitle,
             startTime: startTime,
             endTime: endTime,
@@ -473,7 +474,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         // Function to delete an event
         deleteEvent: function(eventId) {
             let payload = {
-                calendarId: this.calendarId,
+                calendarId: this.config.calendarId,
                 eventId: this.currentEventId
             };
         console.log ("socket notification sent to delete event");
