@@ -168,7 +168,7 @@ module.exports = NodeHelper.create({
 	};
 	
 	calendar.events.update({
-	  calendarId: 'primary',
+	  calendarId: payload.calendarId,
 	  eventId: payload.eventId,  // Assuming you have the eventId in your payload
 	  resource: event
 	}, (err, event) => {
@@ -198,7 +198,7 @@ module.exports = NodeHelper.create({
 	const calendar = google.calendar({ version: "v3", auth: oauth2Client });
 	
 	calendar.events.delete({
-	  calendarId: 'primary',
+	  calendarId: payload.calendarId,
 	  eventId: payload.eventId,  // Assuming you have the eventId in your payload
 	}, (err) => {
 	  if (err) {

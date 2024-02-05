@@ -1,7 +1,8 @@
 Module.register("MMM-GoogleCalendarEventAdder", {
     // Default module configuration
     defaults: {
-        text: "Add event"
+        text: "Add event",
+        calendarId: "primary"
     },
     
     endContainer: null,
@@ -446,6 +447,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         }
     
         let payload = {
+            calendarId: this.calendarId,
             eventTitle: eventTitle,
             startTime: startTime,
             endTime: endTime,
@@ -471,6 +473,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         // Function to delete an event
         deleteEvent: function(eventId) {
             let payload = {
+                calendarId: this.calendarId,
                 eventId: this.currentEventId
             };
         console.log ("socket notification sent to delete event");
