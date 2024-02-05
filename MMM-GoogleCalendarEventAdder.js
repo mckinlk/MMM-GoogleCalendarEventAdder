@@ -7,12 +7,10 @@ Module.register("MMM-GoogleCalendarEventAdder", {
     
     endContainer: null,
     isNewEvent: false,
-
-
+    currentEventId: "",
 
     start: function () {
         Log.info("Starting module: " + this.name);
-        Log.info("Starting module: " + this.config.calendarId);
     },
 
     getStyles: function () {
@@ -566,9 +564,8 @@ Module.register("MMM-GoogleCalendarEventAdder", {
 
             // Store the event ID in a hidden field or as a module variable
             this.currentEventId = eventDetails.id;
-            console.log(eventDetails.id);
-            
-                this.attachKeyboardToInput();
+            console.log("currentEventId: ", eventDetails.id);
+            this.attachKeyboardToInput();
         },
 
         attachKeyboardToInput: function() {
@@ -589,7 +586,6 @@ Module.register("MMM-GoogleCalendarEventAdder", {
 
 
     socketNotificationReceived: function(notification, payload) {
-        console.log('Calendar ID in Payload: ', payload.calendarId);    
         switch (notification) {
             case "EVENT_ADD_SUCCESS_MAIN":
                 this.showMessage('Event added!', 'success');
