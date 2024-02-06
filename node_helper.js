@@ -162,12 +162,12 @@ updateCalendarEvent: function(payload) {
           summary: payload.eventTitle,
           start: {
               date: payload.startTime,
-              dateTime: startTime,
+              //dateTime: startTime,
               timeZone: "America/New_York",
           },
           end: {
               date: payload.endTime,
-              dateTime: endTime,
+              //dateTime: endTime,
               timeZone: "America/New_York",
           },
         };
