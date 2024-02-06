@@ -161,11 +161,13 @@ updateCalendarEvent: function(payload) {
        myEventvent = {
           summary: payload.eventTitle,
           start: {
-              date: startTime,
+              date: payload.startTime,
+              dateTime: startTime,
               timeZone: "America/New_York",
           },
           end: {
-              date: endTime,
+              date: payload.endTime,
+              dateTime: endTime,
               timeZone: "America/New_York",
           },
         };
@@ -183,19 +185,20 @@ updateCalendarEvent: function(payload) {
         };
     }
     const event = myEvent;
+    console.log('event', event);
 
-      calendar.events.update({
-        calendarId: payload.calendarId,
-        eventId: payload.eventId,  // Assuming you have the eventId in your payload
-        resource: event
-      }, (err, event) => {
-        if (err) {
-          console.log('There was an error updating the event: ', err);
-          return;
-        }
-        console.log('Event updated: %s', event.data.htmlLink);
-        this.sendSocketNotification("EVENT_UPDATE_SUCCESS", {});
-      });
+    calendar.events.update({
+      calendarId: payload.calendarId,
+      eventId: payload.eventId,  // Assuming you have the eventId in your payload
+      resource: event
+    }, (err, event) => {
+      if (err) {
+        console.log('There was an error updating the event: ', err);
+        return;
+      }
+      console.log('Event updated: %s', event.data.htmlLink);
+      this.sendSocketNotification("EVENT_UPDATE_SUCCESS", {});
+    });
 
     } else {
       this.getNewToken(oauth2Client, this.updateCalendarEvent.bind(this, payload));
