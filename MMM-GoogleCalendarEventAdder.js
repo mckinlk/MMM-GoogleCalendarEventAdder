@@ -541,24 +541,29 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         // Set the all-day event checkbox
         let allDayCheckbox = document.getElementById("allDay");
         allDayCheckbox.checked = eventDetails.allDay === "true";
-
-        // Handle start time using similar logic to populateFormForNewEvent
-        let startTime = document.getElementById('startTime');
+        allDayCheckbox.dispatchEvent(new Event('change', { 'bubbles': true }));
+        
+        let offset = 16;
+        allDayCheckbox.checked ? offset = 10 : offset = 16; //Format: "YYYY-MM-DD" "YYYY-MM-DDTHH:MM"
+        
         if (startTime && eventDetails.startDate) {
-            let date = new Date(Number(eventDetails.startDate));  // Convert string to number
-            let year = date.getFullYear();
-            let month = ("0" + (date.getMonth() + 1)).slice(-2);
-            let day = ("0" + date.getDate()).slice(-2);
-            let hours = ("0" + date.getHours()).slice(-2);
-            let minutes = ("0" + date.getMinutes()).slice(-2);
-            startTime.value = `${year}-${month}-${day}T${hours}:${minutes}`;
-            console.log("After setting value in populateFormWithEventDetails:", startTime.value);
+            let startDate = new Date(Number(eventDetails.startDate));
+            // Get the UTC offset in minutes
+            const utcOffsetInMinutes = startDate.getTimezoneOffset();
+            // Adjust the date by adding the UTC offset
+            startDate.setMinutes(startDate.getMinutes() - utcOffsetInMinutes);
+            let formattedEndDate = startDate.toISOString().slice(0,offset);
+            document.getElementById('startTime').value = formattedEndDate;
         }
 
         // Handle end time
         if (eventDetails.endDate) {
-            let endDate = new Date(Number(eventDetails.endDate));  // Convert string to number
-            let formattedEndDate = endDate.toISOString().slice(0,16); // Format: "YYYY-MM-DDTHH:MM"
+            let endDate = new Date(Number(eventDetails.endDate));  
+            // Get the UTC offset in minutes
+            const utcOffsetInMinutes = endDate.getTimezoneOffset();
+            // Adjust the date by adding the UTC offset
+            endDate.setMinutes(endDate.getMinutes() - utcOffsetInMinutes);
+            let formattedEndDate = endDate.toISOString().slice(0,offset); 
             document.getElementById("endTime").value = formattedEndDate;
         }
 
@@ -581,7 +586,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         } else {
             console.log("Event Title input field not found.");
         }
-    },
+    },  
 
     socketNotificationReceived: function(notification, payload) {
         switch (notification) {

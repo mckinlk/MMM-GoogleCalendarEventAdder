@@ -87,6 +87,8 @@ module.exports = NodeHelper.create({
   },
 
   insertCalendarEvent: function(payload, oauth2Client) {
+    console.log('insertCalendarEvent payload:', payload);
+
     const startTime = moment(payload.startTime).tz("America/New_York").format();
     const endTime = moment(payload.endTime).tz("America/New_York").format();
 
@@ -118,7 +120,6 @@ module.exports = NodeHelper.create({
     }
 
     console.log("Constructed event: ", event); // Log constructed event
-    console.log("calendarId: ", payload.calendarId); // Log constructed event
     const calendar = google.calendar({ version: "v3", auth: oauth2Client });
     calendar.events.insert(
       {
@@ -139,54 +140,70 @@ module.exports = NodeHelper.create({
   );
 },
 
-  updateCalendarEvent: function(payload) {
-    console.log('Received payload:', payload);
+updateCalendarEvent: function(payload) {
+  console.log('updateCalendarEvent payload:', payload);
 
-      const oauth2Client = new OAuth2(
-	credentials.installed.client_id,
-	credentials.installed.client_secret,
-	credentials.installed.redirect_uris[0],
-      );
+    const oauth2Client = new OAuth2(
+      credentials.installed.client_id,
+      credentials.installed.client_secret,
+      credentials.installed.redirect_uris[0],
+    );
 
-      // Check if we have previously stored a token.
-      if (secrets.access_token && secrets.refresh_token) {
-	oauth2Client.credentials = secrets;
-	const calendar = google.calendar({ version: "v3", auth: oauth2Client });
-	
-	const startTime = moment(payload.startTime).tz("America/New_York").format();
-	const endTime = moment(payload.endTime).tz("America/New_York").format();
-	
-	const event = {
-	  summary: payload.eventTitle,
-	  start: {
-	      dateTime: startTime,
-	      timeZone: "America/New_York",
-	  },
-	  end: {
-	      dateTime: endTime,
-	      timeZone: "America/New_York",
-	  },
-	};
-	
-	calendar.events.update({
-	  calendarId: payload.calendarId,
-	  eventId: payload.eventId,  // Assuming you have the eventId in your payload
-	  resource: event
-	}, (err, event) => {
-	  if (err) {
-	    console.log('There was an error updating the event: ', err);
-	    return;
-	  }
-	  console.log('Event updated: %s', event.data.htmlLink);
-	  this.sendSocketNotification("EVENT_UPDATE_SUCCESS", {});
-	});
-
+    // Check if we have previously stored a token.
+    if (secrets.access_token && secrets.refresh_token) {
+      oauth2Client.credentials = secrets;
+      const calendar = google.calendar({ version: "v3", auth: oauth2Client });
+      
+      const startTime = moment(payload.startTime).tz("America/New_York").format();
+      const endTime = moment(payload.endTime).tz("America/New_York").format();
+      
+      if (payload.allDay === true){
+        const event = {
+          summary: payload.eventTitle,
+          start: {
+              date: startTime,
+              timeZone: "America/New_York",
+          },
+          end: {
+              date: endTime,
+              timeZone: "America/New_York",
+          },
+        };
       } else {
-	this.getNewToken(oauth2Client, this.updateCalendarEvent.bind(this, payload));
-      }
-  },
+        const event = {
+          summary: payload.eventTitle,
+          start: {
+              dateTime: startTime,
+              timeZone: "America/New_York",
+          },
+          end: {
+              dateTime: endTime,
+              timeZone: "America/New_York",
+          },
+        };
+    }
 
-  deleteCalendarEvent: function(payload) {
+      calendar.events.update({
+        calendarId: payload.calendarId,
+        eventId: payload.eventId,  // Assuming you have the eventId in your payload
+        resource: event
+      }, (err, event) => {
+        if (err) {
+          console.log('There was an error updating the event: ', err);
+          return;
+        }
+        console.log('Event updated: %s', event.data.htmlLink);
+        this.sendSocketNotification("EVENT_UPDATE_SUCCESS", {});
+      });
+
+    } else {
+      this.getNewToken(oauth2Client, this.updateCalendarEvent.bind(this, payload));
+    }
+},
+
+deleteCalendarEvent: function(payload) {
+  console.log('deleteCalendarEvent payload:', payload);
+
       const oauth2Client = new OAuth2(
 	credentials.installed.client_id,
 	credentials.installed.client_secret,
