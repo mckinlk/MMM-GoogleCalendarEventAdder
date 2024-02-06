@@ -111,8 +111,8 @@ Module.register("MMM-GoogleCalendarEventAdder", {
 
         // Variable to store the selected name
         let selectedName = null;
-
-        this.config.names.forEach(name => {
+        let myNames = this.config.names.split(",");
+        myNames.forEach(name => {
             // Create a new button element
             const button = document.createElement('button');
             button.textContent = name;
