@@ -24,7 +24,6 @@ module.exports = NodeHelper.create({
     console.log('Calendar ID from Payload: ', payload.calendarId);    
       switch(notification) {
 	  case "ADD_CALENDAR_EVENT":
-      
 	      this.addCalendarEvent(payload);
 	      break;
 	  case "UPDATE_CALENDAR_EVENT":

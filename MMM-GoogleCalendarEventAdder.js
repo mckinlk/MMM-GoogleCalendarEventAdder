@@ -3,7 +3,8 @@ Module.register("MMM-GoogleCalendarEventAdder", {
     defaults: {
         text: "Add event",
         calendarId: "primary",
-        updateNotification: 'GCAL_UPDATE'
+        updateNotification: 'GCAL_UPDATE',
+        names: [],
     },
     
     endContainer: null,
@@ -108,13 +109,10 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         championsButton.classList.add("championsButton");
         formContentContainer.appendChild(championsButton);
 
-        // Add array of shortcut names
-        const names = ['Jenn', 'Heidi', 'Sara'];
-
         // Variable to store the selected name
         let selectedName = null;
 
-        names.forEach(name => {
+        this.config.names.forEach(name => {
             // Create a new button element
             const button = document.createElement('button');
             button.textContent = name;
@@ -452,7 +450,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
             allDay: allDay
         };
     
-        if (this.currentEventId) {
+        if (this.currentEventId !== "") {
             // If an event ID exists, treat this as an update
             payload.eventId = this.currentEventId;
             this.sendSocketNotification("UPDATE_CALENDAR_EVENT", payload);
@@ -475,12 +473,15 @@ Module.register("MMM-GoogleCalendarEventAdder", {
             eventId: this.currentEventId
         };
         console.log ("socket notification sent to delete event");
-        this.sendSocketNotification("DELETE_CALENDAR_EVENT", payload);
+        if (this.currentEventId !== "") {
+            this.sendSocketNotification("DELETE_CALENDAR_EVENT", payload);
+            this.message = "Deleting event...";
+            this.messageType = "info";
+        } else {
+            this.message = "Not an event!";
+            this.messageType = "warn";
+        }
         this.closeForm();
-        // this.sendNotification(this.config.updateNotification);
-        this.config.updateNotification
-        this.message = "Deleting event...";
-        this.messageType = "info";
         this.updateDom();
     },
     
@@ -504,7 +505,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
 
     populateFormForNewEvent: function(payload) {
         console.log("Inside populateFormForNewEvent.", payload);
-
+        this.currentEventId = "";
         // Prepopulate the start date with the date from the payload
         let startTime = document.getElementById('startTime');
         if (startTime) {
@@ -527,7 +528,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
             let minutes = "30";
             endTime.value = `${year}-${month}-${day}T${hours}:${minutes}`;
         }
-            this.attachKeyboardToInput();
+        this.attachKeyboardToInput();
     },
 
     populateFormWithEventDetails: function(eventDetails) {
