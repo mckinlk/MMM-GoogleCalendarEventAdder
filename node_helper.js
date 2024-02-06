@@ -156,9 +156,9 @@ updateCalendarEvent: function(payload) {
       
       const startTime = moment(payload.startTime).tz("America/New_York").format();
       const endTime = moment(payload.endTime).tz("America/New_York").format();
-      
+      let myEvent = null;
       if (payload.allDay === true){
-        const event = {
+       myEventvent = {
           summary: payload.eventTitle,
           start: {
               date: startTime,
@@ -170,7 +170,7 @@ updateCalendarEvent: function(payload) {
           },
         };
       } else {
-        const event = {
+        myEventvent = {
           summary: payload.eventTitle,
           start: {
               dateTime: startTime,
@@ -182,6 +182,7 @@ updateCalendarEvent: function(payload) {
           },
         };
     }
+    const event = myEvent;
 
       calendar.events.update({
         calendarId: payload.calendarId,
