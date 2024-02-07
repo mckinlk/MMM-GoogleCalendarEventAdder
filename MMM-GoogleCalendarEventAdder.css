@@ -58,7 +58,7 @@
     box-shadow: -2px 5px 8px rgba(0, 0, 0, 0.3);
 }
 
-#MMM-GoogleCalendarEventAdder .add-event-button i {
+#MMM-GoogleCalendarEventAdder .add-event-button {
     /* Creating a gradient effect for the plus icon and making it larger */
     font-size: 28px; /* you may adjust this based on your preference */
     background: -webkit-linear-gradient(left, #FBBC05, #EA4335, #34A853, #4285F4);
@@ -200,14 +200,14 @@
     font-size: 18px;
 }
 
-#nameButtonWrapper
+#nameButtonWrapper,
 #shortcutButtonWrapper{
     width: 100%;
     text-align: left;
     margin-top: 10px;
 }
 
-.nameButton
+.nameButton,
 .shortcutButton {
     background-color: #f2f2f2; /* light gray background */
     border: 1px solid #ccc; /* border color */
@@ -218,18 +218,18 @@
     margin-right: 10px;
 }
 
-.nameButton:last-child 
+.nameButton:last-child, 
 .shortcutButton:last-child {
     margin-right: 0; /* Remove margin from the last button to avoid extra spacing */
 }
 
-.nameButton:hover
+.nameButton:hover,
 .shortcutButton:hover {
     background-color: #e6e6e6; /* slightly darker background on hover */
 }
 
 .selected,
-.nameButton:focus
+.nameButton:focus,
 .shortcutButton:focus {
     background-color: #007BFF; /* blue background when selected */
     color: white; /* white text when selected */
