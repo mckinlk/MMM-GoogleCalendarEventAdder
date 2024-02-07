@@ -89,50 +89,11 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         // Append the nameButtonWrapper to formContentContainer
         formContentContainer.appendChild(nameButtonWrapper);
 
-        // Create a wrapper for the shortcut text buttons
-        const shortcutButtonWrapper = document.createElement('div');
-        shortcutButtonWrapper.id = 'shortcutButtonWrapper';
-
-        // Append the shortcutButtonWrapper to formContentContainer
-        formContentContainer.appendChild(shortcutButtonWrapper);
-
         // Create the event title field
         let titleContainer = this.createFormElement("div", {class: "form-group"});
         titleContainer.appendChild(this.createFormElement("label", {for: "eventTitle"}, {textContent: "Event Title:"}));
         titleContainer.appendChild(this.createFormElement("input", {id: "eventTitle", type: "text"}));
         formContentContainer.appendChild(titleContainer);
-
-        //Variable to store the select shortcut text
-        let selectedShortcut = null;
-        let myShortcuts = this.config.shortcuts.split(",");
-        myShortcuts.forEach(name => {
-            // Create a new button element
-            const button = document.createElement('button');
-            button.textContent = name;
-            button.setAttribute('type', 'button'); 
-            button.classList.add('nameButton');
-            button.setAttribute('data-name', name);
-
-            // Add event listener to the button
-            button.addEventListener('click', function(event) {
-                const clickedName = event.target.getAttribute('data-name');
-                
-                if (selectedShortcut === clickedName) {
-                    event.target.classList.remove('selected');
-                    selectedShortcut = null;
-                } else {
-                    if (selectedShortcut) {
-                        document.querySelector(`[data-name="${selectedShortcut}"]`).classList.remove('selected');
-                    }
-                    selectedShortcut = clickedName;
-                    event.target.classList.add('selected');
-                }
-                event.target.blur(); 
-            });
-
-            // Append the button to the nameButtonWrapper
-            shortcutButtonWrapper.appendChild(button);
-        });
 
         // Variable to store the selected name
         let selectedName = null;
@@ -163,7 +124,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
             });
 
             // Append the button to the nameButtonWrapper
-            nameButtonWrapper.appendChild(button);
+            //nameButtonWrapper.appendChild(button);
         });
 
         // Create the all-day event checkbox
@@ -254,6 +215,47 @@ Module.register("MMM-GoogleCalendarEventAdder", {
           });
                
         formContentContainer.appendChild(timeContainer);  
+
+        // Create a wrapper for the shortcut text buttons
+        const shortcutButtonWrapper = document.createElement('div');
+        shortcutButtonWrapper.id = 'shortcutButtonWrapper';
+
+        // Append the shortcutButtonWrapper to formContentContainer
+        formContentContainer.appendChild(shortcutButtonWrapper);
+
+        //Variable to store the select shortcut text
+        let selectedShortcut = null;
+        let myShortcuts = this.config.shortcuts.split(",");
+        myShortcuts.forEach(name => {
+            // Create a new button element
+            const button = document.createElement('button');
+            button.textContent = name;
+            button.setAttribute('type', 'button'); 
+            button.classList.add('shortcutButton');
+            button.setAttribute('data-name', name);
+
+            // Add event listener to the button
+            button.addEventListener('click', function(event) {
+                const clickedName = event.target.getAttribute('data-name');
+                
+                if (selectedShortcut === clickedName) {
+                    event.target.classList.remove('selected');
+                    selectedShortcut = null;
+                    eventTitleField.value = "";
+                } else {
+                    if (selectedShortcut) {
+                        document.querySelector(`[data-name="${selectedShortcut}"]`).classList.remove('selected');
+                    }
+                    selectedShortcut = clickedName;
+                    eventTitleField.value = clickedName;
+                    event.target.classList.add('selected');
+                }
+                //event.target.blur(); 
+            });
+
+            // Append the button to the shortcutButtonWrapper
+            shortcutButtonWrapper.appendChild(button);
+        });
 
         // Create the submit button
         let submitButton = this.createFormElement("button", {type: "submit", class: "btn"}, {textContent: "Submit"});
@@ -410,7 +412,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         const selectedButton = document.querySelector('.nameButton.selected');
         if (selectedButton) {
             const selectedName = selectedButton.textContent;
-            eventTitle = `${selectedName} ${eventTitle}`;  
+            eventTitle = `${eventTitle} - ${selectedName}`;  
             eventTitleElement.value = eventTitle;
         }
 

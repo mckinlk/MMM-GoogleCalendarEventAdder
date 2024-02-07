@@ -200,16 +200,11 @@
     font-size: 18px;
 }
 
-#nameButtonWrapper {
+#nameButtonWrapper
+#shortcutButtonWrapper{
     width: 100%;
     text-align: left;
     margin-top: 10px;
-}
-
-#shortcutButtonWrapper {
-    width: 100%;
-    text-align: left;
-    margin-top: 365px;
 }
 
 .nameButton
