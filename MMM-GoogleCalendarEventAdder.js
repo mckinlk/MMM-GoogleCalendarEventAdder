@@ -124,7 +124,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
             });
 
             // Append the button to the nameButtonWrapper
-            //nameButtonWrapper.appendChild(button);
+            nameButtonWrapper.appendChild(button);
         });
 
         // Create the all-day event checkbox
@@ -237,7 +237,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
             // Add event listener to the button
             button.addEventListener('click', function(event) {
                 const clickedName = event.target.getAttribute('data-name');
-                
+                let eventTitleField = document.getElementById("eventTitle");  
                 if (selectedShortcut === clickedName) {
                     event.target.classList.remove('selected');
                     selectedShortcut = null;
@@ -250,7 +250,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
                     eventTitleField.value = clickedName;
                     event.target.classList.add('selected');
                 }
-                //event.target.blur(); 
+                event.target.blur(); 
             });
 
             // Append the button to the shortcutButtonWrapper
