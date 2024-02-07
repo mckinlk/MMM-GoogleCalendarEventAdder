@@ -37,8 +37,8 @@
 #MMM-GoogleCalendarEventAdder .add-event-button {
     /* Positioning the button in the top right of the calendar */
     position: absolute;
-    top: 80px;
-    left: 1330px;
+    top: 5px;
+    left: 5px;
     
     /* Styling the button as a circular button */
     width: 50px;
