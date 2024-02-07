@@ -71,6 +71,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         addButton.className = "add-event-button";
         addButton.innerHTML = '<i class="fas fa-plus"></i>';  // Removing "Add Event" text
         addButton.addEventListener("click", () => {
+            this.currentEventId = "";
             this.isNewEvent = true;  // Set the flag
             this.openForm();
         });
@@ -359,16 +360,14 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         return wrapper;
     },
 
-    openForm: function (isNewEvent = true) {
-        
-
+    openForm: function (isNewEvent = true) { 
         let form = document.getElementById("eventForm");
         let startTimeInput = document.getElementById("startTime");
         console.log("startTimeInput element:", startTimeInput);
 
         if (form) {
             form.style.display = "block";
-            // Check if it's a new event
+            // Check if it's a new event before overwriting the startTime
             if (isNewEvent && !startTimeInput.value) {
                 let now = new Date();
                 let year = now.getFullYear();
@@ -378,8 +377,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
                 let minutes = ("0" + now.getMinutes()).slice(-2);
                 startTimeInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
                 console.log("Inside openForm. startTime.value:", startTime.value);
-            }
-            // this.isNewEvent = false;  // Reset the flag
+            } 
         }
     },
 
@@ -457,10 +455,10 @@ Module.register("MMM-GoogleCalendarEventAdder", {
     deleteEvent: function(eventId) {
         let payload = {
             calendarId: this.config.calendarId,
-            eventId: this.currentEventId
+            eventId: eventId
         };
         console.log ("socket notification sent to delete event");
-        if (this.currentEventId !== "") {
+        if (eventId !== "") {
             this.sendSocketNotification("DELETE_CALENDAR_EVENT", payload);
             this.message = "Deleting event...";
             this.messageType = "info";
