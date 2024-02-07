@@ -89,6 +89,13 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         // Append the nameButtonWrapper to formContentContainer
         formContentContainer.appendChild(nameButtonWrapper);
 
+        // Create a wrapper for the shortcut text buttons
+        const shortcutButtonWrapper = document.createElement('div');
+        shortcutButtonWrapper.id = 'shortcutButtonWrapper';
+
+        // Append the shortcutButtonWrapper to formContentContainer
+        formContentContainer.appendChild(shortcutButtonWrapper);
+
         // Create the event title field
         let titleContainer = this.createFormElement("div", {class: "form-group"});
         titleContainer.appendChild(this.createFormElement("label", {for: "eventTitle"}, {textContent: "Event Title:"}));
