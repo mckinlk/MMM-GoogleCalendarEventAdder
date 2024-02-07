@@ -119,28 +119,6 @@
     transition: background-color 0.3s ease;
 }
 
-.jasonWorkButton {
-    position: absolute;
-    top: 365px;
-    left: 135px;
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    line-height: 30px;
-    cursor: pointer
-}
-
-.championsButton {
-    position: absolute;
-    top: 365px;
-    left: 185px;
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    line-height: 30px;
-    cursor: pointer
-}
-
 #MMM-GoogleCalendarEventAdder .btn[type="cancel"]:hover {
     background-color: rgba(0, 0, 0, 0.1);
 }
@@ -228,7 +206,14 @@
     margin-top: 10px;
 }
 
-.nameButton {
+#shortcutButtonWrapper {
+    width: 100%;
+    text-align: left;
+    margin-top: 365px;
+}
+
+.nameButton
+.shortcutButton {
     background-color: #f2f2f2; /* light gray background */
     border: 1px solid #ccc; /* border color */
     padding: 8px 15px; /* padding around the text */
@@ -238,16 +223,19 @@
     margin-right: 10px;
 }
 
-.nameButton:last-child {
+.nameButton:last-child 
+.shortcutButton:last-child {
     margin-right: 0; /* Remove margin from the last button to avoid extra spacing */
 }
 
-.nameButton:hover {
+.nameButton:hover
+.shortcutButton:hover {
     background-color: #e6e6e6; /* slightly darker background on hover */
 }
 
 .selected,
-.nameButton:focus {
+.nameButton:focus
+.shortcutButton:focus {
     background-color: #007BFF; /* blue background when selected */
     color: white; /* white text when selected */
 }

@@ -5,6 +5,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         calendarId: "primary",
         updateNotification: 'GCAL_UPDATE',
         names: [],
+        shortcuts: []
     },
     
     endContainer: null,
@@ -74,7 +75,6 @@ Module.register("MMM-GoogleCalendarEventAdder", {
             this.openForm();
         });
 
-        
         // Create header bar on form
         let headerBar = this.createFormElement("div", {class: "headerBar"});
         form.appendChild(headerBar);
@@ -95,19 +95,37 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         titleContainer.appendChild(this.createFormElement("input", {id: "eventTitle", type: "text"}));
         formContentContainer.appendChild(titleContainer);
 
-        // Create Jason Work Shortcut
-        let jasonWorkButton = document.createElement('img');
-        jasonWorkButton.src = 'modules/MMM-GoogleCalendarEventAdder/icon/jason_icon.png';
-        jasonWorkButton.alt = "Add Jason Work";
-        jasonWorkButton.classList.add("jasonWorkButton");
-        formContentContainer.appendChild(jasonWorkButton);
+        //Variable to store the select shortcut text
+        let selectedShortcut = null;
+        let myShortcuts = this.config.shortcuts.split(",");
+        myShortcuts.forEach(name => {
+            // Create a new button element
+            const button = document.createElement('button');
+            button.textContent = name;
+            button.setAttribute('type', 'button'); 
+            button.classList.add('nameButton');
+            button.setAttribute('data-name', name);
 
-        // Create Champions Shortcut
-        let championsButton = document.createElement('img');
-        championsButton.src = 'modules/MMM-GoogleCalendarEventAdder/icon/C_logo.png';
-        championsButton.alt = "Add Champions Day";
-        championsButton.classList.add("championsButton");
-        formContentContainer.appendChild(championsButton);
+            // Add event listener to the button
+            button.addEventListener('click', function(event) {
+                const clickedName = event.target.getAttribute('data-name');
+                
+                if (selectedShortcut === clickedName) {
+                    event.target.classList.remove('selected');
+                    selectedShortcut = null;
+                } else {
+                    if (selectedShortcut) {
+                        document.querySelector(`[data-name="${selectedShortcut}"]`).classList.remove('selected');
+                    }
+                    selectedShortcut = clickedName;
+                    event.target.classList.add('selected');
+                }
+                event.target.blur(); 
+            });
+
+            // Append the button to the nameButtonWrapper
+            shortcutButtonWrapper.appendChild(button);
+        });
 
         // Variable to store the selected name
         let selectedName = null;
@@ -159,32 +177,6 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         let startTimeInput = this.createFormElement("input", {id: "startTime", type: "datetime-local"});
         startContainer.appendChild(startTimeInput);
         timeContainer.appendChild(startContainer);
-
-        // prepopulate fields when icon is clicked
-        jasonWorkButton.addEventListener('click', function() {
-            let eventTitleField = document.getElementById("eventTitle");  
-            let allDayCheckbox = document.getElementById("allDay");  
-            
-            // Set the values
-            eventTitleField.value = "Jason work";
-            allDayCheckbox.checked = true;
-
-            allDayCheckbox.dispatchEvent(new Event('change', { 'bubbles': true }));
-
-        });
- 
-        // prepopulate fields when icon is clicked
-        championsButton.addEventListener('click', function() {
-            let eventTitleField = document.getElementById("eventTitle");  
-            let allDayCheckbox = document.getElementById("allDay");  
-            
-            // Set the values
-            eventTitleField.value = "Champions";
-            allDayCheckbox.checked = true;
-
-            allDayCheckbox.dispatchEvent(new Event('change', { 'bubbles': true }));
-
-        });
 
         allDayCheckbox.addEventListener('change', () => {
             let datePortion = startTimeInput.value.split('T')[0];  // Extract just the date
@@ -253,20 +245,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
             let minutes = ("0" + endDate.getMinutes()).slice(-2);
             endTimeInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
           });
-
-          // Hide/Show end time based on allday selection
-         /*   allDayCheckbox.addEventListener('change', () => {
-                if (allDayCheckbox.checked) {
-                    startTimeLabel.textContent = "Start Date: ";
-                // If the checkbox is checked, hide the end time
-                    this.endContainer.style.display = 'block';
-                } else {
-                    startTimeLabel.textContent = "Start Time: ";
-                // If the checkbox is unchecked, show the end time
-                    this.endContainer.style.display = 'none';
-                }
-            });*/
-                
+               
         formContentContainer.appendChild(timeContainer);  
 
         // Create the submit button
@@ -279,7 +258,6 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         // Create a container for the submit button
         let submitButtonContainer = this.createFormElement("div", {class: "form-group submit-button-container"});
         submitButtonContainer.appendChild(submitButton);
-
         formContentContainer.appendChild(submitButtonContainer);  
 
         // Create the cancel button
