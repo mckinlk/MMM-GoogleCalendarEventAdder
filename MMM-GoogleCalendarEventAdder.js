@@ -69,7 +69,7 @@ Module.register("MMM-GoogleCalendarEventAdder", {
         // Create the "Add event" button
         let addButton = document.createElement("button");
         addButton.className = "add-event-button";
-        addButton.innerHTML = '<i class="fas fa-plus"></i>';  // Removing "Add Event" text
+        addButton.innerHTML = '<i class="fas fa-plus"></i>';
         addButton.addEventListener("click", () => {
             this.currentEventId = "";
             this.isNewEvent = true;  // Set the flag
