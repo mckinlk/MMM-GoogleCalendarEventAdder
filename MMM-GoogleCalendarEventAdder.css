@@ -41,7 +41,7 @@
 #MMM-GoogleCalendarEventAdder .add-event-button {
     /* Positioning the button in the top right of the calendar */
     position: absolute;
-    top: calc(var(--button_size)*0.5 + 10px);    
+    top: calc(var(--button_size) - 15px);    
     right: 5px;
     
     /* Styling the button as a circular button */
@@ -62,12 +62,11 @@
 #MMM-GoogleCalendarEventAdder .add-event-button {
     /* Creating a gradient effect for the plus icon and making it larger */
     font-size: 42px; /* you may adjust this based on your preference */
-    background: -webkit-linear-gradient(left,
+    background: -webkit-linear-gradient(15deg,
         #FF0000, /* Red */
         #FF7F00, /* Orange */
         #FFFF00, /* Yellow */
         #00FF00, /* Green */
-        #0000FF, /* Blue */
         #4B0082, /* Indigo */
         #8B00FF  /* Violet */);
     -webkit-background-clip: text;
